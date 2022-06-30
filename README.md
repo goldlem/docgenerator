@@ -1,6 +1,6 @@
 # __DocGenerator__
 
-## __Discription__
+## __Description__
 The programm will generate selected number of document.
 
 User must choose ___invoice___ and ___remittance templates___, ___extension___ and ___number___ of generated files.
