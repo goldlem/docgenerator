@@ -65,7 +65,7 @@ export class GeneratorForm extends Component {
                     </label>
                 </div>
                 <div>
-                    <label htmlFor={"fileExtension"}>Choose a remittance template</label>
+                    <label htmlFor={"fileExtension"}>Choose a file extension</label>
                     <select value={this.state.value} onChange={this.handleChange} name={"fileExtension"}
                             id={"fileExtension"}>
                         <option value={"docx"}>docx</option>
