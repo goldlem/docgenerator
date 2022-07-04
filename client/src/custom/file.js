@@ -1,5 +1,5 @@
 export const getDownloadFile = async (param) => {
-    return fetch("http://192.168.1.6:8080/invoice",
+    return fetch("http://localhost:8080/invoice",
         {
             method: "POST",
             headers: {
