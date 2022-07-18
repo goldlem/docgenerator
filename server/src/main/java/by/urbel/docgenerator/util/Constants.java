@@ -4,6 +4,7 @@ import java.nio.file.Path;
 
 public class Constants {
     public static final String  TEMPLATE_DIR = "/template";
+    public static final String  HTML_TEMPLATE_DIR = "/htmlTemplates";
     public static final Path OUT_PATH = Path.of("out/");
 
     public static final String COMPANY_DATA_PATH = "/data/company.csv";

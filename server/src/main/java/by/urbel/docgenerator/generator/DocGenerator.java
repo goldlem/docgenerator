@@ -3,12 +3,12 @@ package by.urbel.docgenerator.generator;
 import by.urbel.docgenerator.entity.GenerationParameters;
 import by.urbel.docgenerator.service.DataMapper;
 import by.urbel.docgenerator.service.TemplateService;
+import by.urbel.docgenerator.template.DocumentType;
 import by.urbel.docgenerator.template.Template;
 import by.urbel.docgenerator.util.FileUtils;
+import by.urbel.docgenerator.util.Randomizer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -20,28 +20,27 @@ import static by.urbel.docgenerator.util.Constants.TEMPLATE_DIR;
 
 @Component
 @Slf4j
-public class Generator {
+public class DocGenerator {
     private final TemplateService templateService;
     private final List<Template> templates = new ArrayList<>();
 
-    public Generator() {
+    public DocGenerator() {
         templateService = new TemplateService();
     }
 
     public File run(GenerationParameters generationParam) throws IOException, URISyntaxException {
         templates.clear();
-        String invoiceType = generationParam.getInvoiceTemplate();
-        String remittanceType = generationParam.getRemittanceTemplate();
-
-        Path invoiceTemplatePath = FileUtils.findTemplatePath(TEMPLATE_DIR, invoiceType);
-        for (int i = 0; i < generationParam.getDocumentNumber(); ++i) {
+        for (int i = 0; i < generationParam.getDocNumber(); ++i) {
+            String invoiceType = Randomizer.getItem(generationParam.getInvoiceType());
+            Path invoiceTemplatePath = FileUtils.findTemplatePath(TEMPLATE_DIR, invoiceType);
             Template invoiceTemplate = generateInvoice(invoiceTemplatePath);
-            if (!remittanceType.isBlank() && invoiceType.toLowerCase().startsWith("invoice")) {
+            if (!invoiceTemplate.getDocumentType().equals(DocumentType.INV_WITH_REM)) {
+                String remittanceType = Randomizer.getItem(generationParam.getRemittanceType());
                 Path remittanceTemplatePath = FileUtils.findTemplatePath(TEMPLATE_DIR, remittanceType);
                 generateRemittance(invoiceTemplate, remittanceTemplatePath);
             }
         }
-        log.info(String.format("Generated %s documents for each document type", generationParam.getDocumentNumber()));
+        log.info(String.format("Generated %s documents", generationParam.getDocNumber()));
 
         return FileUtils.saveDocuments(templates, OUT_PATH, generationParam.getFileExtension());
     }

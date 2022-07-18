@@ -1,5 +1,12 @@
+.invoice-type-select {
+  width: 500px;
+} 
+
 .App {
+  height: 100%;
+  display: flex;
   text-align: center;
+  justify-content: center;
 }
 
 .App-logo {

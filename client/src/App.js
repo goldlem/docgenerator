@@ -1,11 +1,12 @@
 import './App.css';
-import {GeneratorForm} from "./custom/GeneratorForm";
+// import {GeneratorForm} from "./custom/GeneratorForm";
+import { Generate } from './custom/GeneratorForm';
 
 
 function App() {
   return (
     <div className="App">
-      <GeneratorForm/>
+     {Generate()}
     </div>
   );
 }

@@ -136,7 +136,7 @@ public class FileUtils {
         }
     }
 
-    public static File saveDocuments(List<Template> templates, Path outDirPath, String fileExtension) throws IOException {
+    public static File saveDocuments(List<Template> templates, Path outDirPath, List<String> fileExtensions) throws IOException {
         FileUtils.prepareOutputDir(outDirPath);
         File zipFile = outDirPath.resolve("invoice.zip").toFile();
         XWPFDocument document = null;
@@ -150,28 +150,30 @@ public class FileUtils {
                 String fileNumber = templateData instanceof FinancialData ?
                         ((FinancialData) templateData).getInvoiceNumber() : Randomizer.getStrNumber(5);
                 String templateName = template.getFileName().split("-")[0];
-                String outputName = String.format("%s-%s.%s", templateName, fileNumber, fileExtension);
-                document = template.getDocument();
+                for (String fileExtension : fileExtensions) {
+                    String outputName = String.format("%s-%s.%s", templateName, fileNumber, fileExtension);
+                    document = template.getDocument();
 
-                ZipEntry zipEntry = new ZipEntry(outputName);
-                zipOutput.putNextEntry(zipEntry);
-                switch (fileExtension) {
-                    case "pdf": {
-                        PdfConverter.getInstance().convert(document, byteArrOutStream, PdfOptions.getDefault());
-                        zipOutput.write(byteArrOutStream.toByteArray());
-                        break;
+                    ZipEntry zipEntry = new ZipEntry(outputName);
+                    zipOutput.putNextEntry(zipEntry);
+                    switch (fileExtension) {
+                        case "pdf": {
+                            PdfConverter.getInstance().convert(document, byteArrOutStream, PdfOptions.getDefault());
+                            zipOutput.write(byteArrOutStream.toByteArray());
+                            break;
+                        }
+                        case "html": {
+                            imagesDir = convertToHtml(template, byteArrOutStream, outDirPath);
+                            zipOutput.write(byteArrOutStream.toByteArray());
+                            break;
+                        }
+                        case "docx": {
+                            document.write(zipOutput);
+                            break;
+                        }
                     }
-                    case "html": {
-                        imagesDir = convertToHtml(template, byteArrOutStream, outDirPath);
-                        zipOutput.write(byteArrOutStream.toByteArray());
-                        break;
-                    }
-                    case "docx": {
-                        document.write(zipOutput);
-                        break;
-                    }
+                    zipOutput.closeEntry();
                 }
-                zipOutput.closeEntry();
                 document.close();
             }
         } catch (IOException e) {
@@ -192,8 +194,8 @@ public class FileUtils {
 
     private static Path convertToHtml(Template template, ByteArrayOutputStream out, Path outDirPath) throws IOException {
         XHTMLOptions options = XHTMLOptions.create().setImageManager(
-                        new ImageManager(outDirPath.toFile(),
-                        String.format("images/%s", template.getDocumentType().toString().toLowerCase())));
+                new ImageManager(outDirPath.toFile(),
+                        String.format("images/%s", template.getFileName().split("-")[0].toLowerCase())));
         XHTMLConverter.getInstance().convert(template.getDocument(), out, options);
         return outDirPath.resolve("images");
     }

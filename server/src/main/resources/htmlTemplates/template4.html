@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{margin-top:20px;
+background:#eee;
+}
+
+.invoice {
+    padding: 30px;
+}
+
+.invoice h2 {
+	margin-top: 0px;
+	line-height: 0.8em;
+}
+
+.invoice .small {
+	font-weight: 300;
+}
+
+.invoice hr {
+	margin-top: 10px;
+	border-color: #ddd;
+}
+
+.invoice .table tr.line {
+	border-bottom: 1px solid #ccc;
+}
+
+.invoice .table td {
+	border: none;
+}
+
+.invoice .identity {
+	margin-top: 10px;
+	font-size: 1.1em;
+	font-weight: 300;
+}
+
+.invoice .identity strong {
+	font-weight: 600;
+}
+
+
+.grid {
+    position: relative;
+	width: 100%;
+	background: #fff;
+	color: #666666;
+	border-radius: 2px;
+	margin-bottom: 25px;
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    				<!-- BEGIN INVOICE -->
+					<div class="col-xs-12">
+						<div class="grid invoice">
+							<div class="grid-body">
+								<div class="invoice-title">
+									<div class="row">
+										<div class="col-xs-12">
+											
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-xs-12">
+											<h2>invoice<br>
+											<span class="small">order #<span id="invoice-number">1088</span></span></h2>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-xs-6">
+										<address>
+											<strong>Billed To:</strong><br>
+											<span id="company-name-from">Apple</span><br>
+											<span id="street-from">1 Apple Park Way Cupertino</span><br>
+											<span id="city-from">California, CA</span> <span id="zip-code-from">95014</span><br>
+											<abbr title="Phone">P:</abbr> <span id="phone-from">(219) 526-6418</span>
+										</address>
+									</div>
+									<div class="col-xs-6 text-right">
+										<address>
+											<strong>Shipped To:</strong><br>
+											<span id="full-name-to">Luka Espinoza</span><br>
+											<span id="street-to">892 Green Lane</span>,<br>
+											<span id="city-to">Hamden</span><br>
+											<abbr title="Phone">P:</abbr> <span id="phone-to">(259) 741-8187</span>
+										</address>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-6">
+										<address>
+											<strong>Payment Method:</strong><br>
+											<span id="bank-name">American Express</span>, <span id="bank-account">ending **** 79633</span><br>
+											<span id="email-from">hampton@hotmail.com</span><br>
+										</address>
+									</div>
+									<div class="col-xs-6 text-right">
+										<address>
+											<strong>Order Date:</strong><br>
+											<span id="invoice-date">15/05/19</span>
+										</address>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<h3>ORDER SUMMARY</h3>
+										<table class="table table-striped">
+											<thead>
+												<tr class="line">
+													<td><strong>#</strong></td>
+													<td class="text-center"><strong>PROJECT</strong></td>
+													<td class="text-center"><strong>HRS</strong></td>
+													<td class="text-right"><strong>RATE</strong></td>
+													<td class="text-right"><strong>SUBTOTAL</strong></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="product-row">
+													<td class="product-id">1</td>
+													<td><strong class="product-name">educate</strong><br><span class="product-description">A website template is a pre-designed webpage, or set of webpages, that anyone can modify with their own content and images to setup a website.</span></td>
+													<td class="text-center product-quantity">10</td>
+													<td class="text-center product-price">$113</td>
+													<td class="text-right product-total">$1,130.00</td>
+												</tr>
+												<tr>
+													<td class="product-id">2</td>
+													<td><strong class="product-name">behavior</strong><br><span class="product-description">Web development is a broad term for the work involved in developing a web site for the Internet (World Wide Web) or an intranet (a private network).</span></td>
+													<td class="text-center product-quantity">11</td>
+													<td class="text-center product-price">$112</td>
+													<td class="text-right product-total">$1,232.00</td>
+												</tr>
+												<tr class="line">
+													<td class="product-id">3</td>
+													<td><strong class="product-name">fearful</strong><br><span class="product-description">Take measures to check the quality, performance, or reliability of (something), especially before putting it into widespread use or practice.</span></td>
+													<td class="text-center product-quantity">12</td>
+													<td class="text-center product-price">$111</td>
+													<td class="text-right product-total">$1,332.00 </td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="3"></td>
+													<td class="text-right"><strong>Taxes</strong></td>
+													<td class="text-right"><strong id="tax-rate">22</strong>%</td>
+												</tr>
+												<tr>
+													<td colspan="3">
+													</td><td class="text-right"><strong>Total</strong></td>
+													<td class="text-right"><strong>$<span id="total-price">2,873.00</span></strong></td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>									
+								</div>
+								<div class="row">
+									<div class="col-md-12 text-right identity">
+										<p>Designer identity<br><strong>Tamsyn Lewis</strong></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END INVOICE -->
+				</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+.generator-form {
+    display: flex;
+    align-items: center;
+}
+
+label{
+    color: hsl(0, 0%, 50%);
+}
+
+button {
+    background-color: #FCFCFD;;
+    border-color:gainsboro;
+    color: black;
+    transition-duration: 0.4s;
+    padding: 10px 24px;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: rgb(197, 197, 197);
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    color: white;
+}
