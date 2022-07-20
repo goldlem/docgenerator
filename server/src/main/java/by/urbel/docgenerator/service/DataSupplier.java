@@ -85,6 +85,31 @@ public class DataSupplier {
                 .build();
     }
 
+    public InvoiceData getInvoiceData() {
+        LocalDate date = Randomizer.getDate();
+        Company companyFrom = getPreparedValue(preparedCompanies);
+        Company companyTo = Randomizer.getItem(companies);
+        companyTo.setCity(Randomizer.getItem(cities)
+                .replace("\"", "")
+                .replace("'", ""));
+        companyTo.setName(companyTo.getName()
+                .replace("\"", "")
+                .replace("'", ""));
+
+        return InvoiceData.builder()
+                .date(date)
+                .dueDate(Randomizer.getDate(date, 2, 0))
+                .dateFormat(Randomizer.getItem(dateFormats.subList(0,2)))
+                .invoiceNumber(Randomizer.getStrNumber(10))
+                .purchaseOrder(Randomizer.getStrNumber(10))
+                .contactPerson(Randomizer.getItem(persons))
+                .summary(getSummary())
+                .companyFrom(companyFrom)
+                .companyTo(companyTo)
+                .bank(getBank())
+                .build();
+    }
+
     private RemittanceData getRemittanceData(Path templatePath) {
         String dateFormat = getPreparedValue(templatePath, datePrefix, dateFormats);
 
@@ -116,19 +141,20 @@ public class DataSupplier {
 
     private Summary getSummary() {
         int productsNumber = Randomizer.getInt(1, 5);
-        double discountRate = Randomizer.getItem(discountRates);
+        double taxRate = Randomizer.getItem(taxRates);
         return Summary.builder()
-                .discountRate(discountRate)
-                .taxRate(Randomizer.getItem(taxRates))
-                .products(getProducts(productsNumber, discountRate))
+                .discountRate(taxRate)
+                .taxRate(taxRate)
+                .products(getProducts(productsNumber, taxRate))
                 .build();
     }
 
-    private List<Product> getProducts(int number, double discountRate) {
+    private List<Product> getProducts(int number, double taxRate) {
         List<Product> templateProducts = new ArrayList<>();
         for (int i = 1; i <= number; i++) {
             double price = Randomizer.getInt(10, 200);
             double quantity = Randomizer.getInt(1, 20);
+            double tax = price*quantity*taxRate/100;
 
             StringBuilder description = new StringBuilder();
             int descLength = Randomizer.getInt(2, 5);
@@ -148,7 +174,7 @@ public class DataSupplier {
                     .quantity(quantity)
                     .price(price)
                     .discount(0.0)
-                    .tax(0.0)
+                    .tax(tax)
                     .build();
             templateProducts.add(product);
         }
@@ -168,6 +194,10 @@ public class DataSupplier {
         } else {
             return values.get(index);
         }
+    }
+
+    private <T> T getPreparedValue(List<T> values) {
+        return Randomizer.getItem(values);
     }
 
     private List<Company> getPreparedCompanies() {

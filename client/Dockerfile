@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn","start","run"]
+CMD ["npm","start"]

@@ -25,11 +25,22 @@ public class Randomizer {
         int maxDays = month == 2 ? 28 : 30;
         int day = getInt(1, maxDays);
         return LocalDate.of(
-                LocalDate.now().getYear() - getInt(1,2),
+                LocalDate.now().getYear() - getInt(1, 2),
                 month,
                 day
         );
+    }
 
+    public static LocalDate getDate(int minYear) {
+        int month = getInt(1, 12);
+        int maxDays = month == 2 ? 28 : 30;
+        int day = getInt(1, maxDays);
+        int year = getInt(minYear, LocalDate.now().getYear() - 16);
+        return LocalDate.of(
+                year,
+                month,
+                day
+        );
     }
 
     public static LocalDate getDate(LocalDate from, int plusMonth, int plusDays) {

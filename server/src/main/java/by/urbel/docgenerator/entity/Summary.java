@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -22,22 +23,20 @@ public class Summary implements Mappable {
     }
 
     public double getTotalDiscount() {
-        return (getSubtotal() + getTax()) * discountRate / 100;
+        return getSubtotal() * discountRate / 100;
     }
 
     public double getTax() {
         return products.stream()
-                .map(p -> p.getTotal() * taxRate / 100)
+                .map(Product::getTax)
+                .filter(Objects::nonNull)
                 .reduce(Double::sum)
                 .get();
     }
 
     public double getTotal() {
-        double total = products.stream()
-                .map(Product::getTotal)
-                .reduce(Double::sum)
-                .get();
-        return total - getTotalDiscount() + getTax();
+        double total = getSubtotal();
+        return total - getTotalDiscount();
     }
 
     @Override

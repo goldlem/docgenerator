@@ -4,8 +4,8 @@ services:
 
   server:
 
-  #  build: server/
-    image: urbel/docgener-server
+    build: server/
+    # image: urbel/docgener-server
 
     command: java -jar backend.jar
 
@@ -14,9 +14,9 @@ services:
 
   client:
 
- #   build: client/
+    build: client/
 
-    image: urbel/docgener-client
+    # image: urbel/docgener-client
 
     command: npm start
 

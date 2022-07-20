@@ -15,11 +15,15 @@ import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.ZipFile;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.http.HttpStatus;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,6 +51,24 @@ public class FileUtils {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static Document readDocumentByName(String fileName) {
+        Path path = null;
+        try {
+            path = getPathFromString(Constants.HTML_TEMPLATE_DIR + fileName);
+        } catch (IOException e) {
+            throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try (InputStream inputStream = getResourceAsIOStream(path.toString())) {
+            Document document = Jsoup.parse(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
+            document.charset(Charset.defaultCharset());
+            return document;
+        } catch (FileNotFoundException e) {
+            throw new ApiRequestException(String.format("File %s is not found!", fileName), HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            throw new ApiRequestException("Exception message: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -92,6 +114,27 @@ public class FileUtils {
         }
     }
 
+    private static Path getPathFromString(String path) throws IOException {
+        FileSystem fileSystem = null;
+        URI uri = null;
+        try {
+            uri = FileUtils.class.getResource(path).toURI();
+
+            if ("jar".equals(uri.getScheme())) {
+                fileSystem = getFileSystem(uri);
+                return fileSystem.getPath("/BOOT-INF/classes" + path);
+            } else {
+                return Paths.get(uri);
+            }
+        } catch (URISyntaxException e) {
+            throw new ApiRequestException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            if (fileSystem != null) {
+                fileSystem.close();
+            }
+        }
+    }
+
     public static Path findTemplatePath(String dirPath, String templateType) throws IOException, URISyntaxException {
         String fileExtension = ".docx";
         URI uri = FileUtils.class.getResource(dirPath).toURI();
@@ -112,12 +155,6 @@ public class FileUtils {
                         HttpStatus.NOT_FOUND);
             }
             return templatePaths.get(0);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (fileSystem != null) {
-                fileSystem.close();
-            }
         }
     }
 
@@ -189,6 +226,23 @@ public class FileUtils {
                 org.apache.commons.io.FileUtils.deleteDirectory(imagesDir.toFile());
             }
         }
+        return zipFile;
+    }
+
+    public static File saveDocuments(List<File> files, Path outDirPath) throws IOException {
+        FileUtils.prepareOutputDir(outDirPath);
+        File zipFile = outDirPath.resolve("html.zip").toFile();
+
+        try (FileOutputStream out = new FileOutputStream(zipFile);
+             ZipOutputStream zipOutput = new ZipOutputStream(out)) {
+            for (File file : files) {
+                ZipEntry zipEntry = new ZipEntry(file.getName());
+                zipOutput.putNextEntry(zipEntry);
+                zipOutput.write(org.apache.commons.io.FileUtils.readFileToByteArray(file));
+                zipOutput.closeEntry();
+            }
+        }
+        org.apache.commons.io.FileUtils.deleteDirectory(Constants.OUT_HTML_PATH.toFile());
         return zipFile;
     }
 

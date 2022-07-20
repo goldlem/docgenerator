@@ -1,10 +1,10 @@
-import '../GeneratorForm.css';
+import '../FormStyle.css';
 import Select from "react-select";
 import React from "react";
 import { getDownloadFile } from "./file"
 import { saveAs } from "file-saver";
 
-export function Generate() {
+export function DocForm() {
 
     const invoiceOptions = [
         { label: "Invoice1", value: "invoice1" },
@@ -52,7 +52,7 @@ export function Generate() {
                 "fileExtension": fileExtension.map((x) => x.value),
                 "docNumber": parseInt(docNumber),
             }
-            getDownloadFile(JSON.stringify(obj)).then(blob => saveAs(blob, 'file.zip'))
+            getDownloadFile("http://localhost:8080/invoice/doc",JSON.stringify(obj)).then(blob => saveAs(blob, 'file.zip'))
                 .catch((error) => {
                     console.log(error);
                 });
@@ -60,7 +60,7 @@ export function Generate() {
     }
 
     return (
-        <div className='generator-form'>
+        <div className='doc-form'>
             <form>
                 <Select
                     className="dropdown"

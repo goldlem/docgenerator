@@ -1,6 +1,5 @@
 package by.urbel.docgenerator.service;
 
-import by.urbel.docgenerator.data.FinancialData;
 import by.urbel.docgenerator.data.InvRemData;
 import by.urbel.docgenerator.data.InvoiceData;
 import by.urbel.docgenerator.entity.Mappable;
@@ -9,23 +8,13 @@ import by.urbel.docgenerator.template.DocumentType;
 import by.urbel.docgenerator.template.Template;
 import by.urbel.docgenerator.template.engine.TemplateEngine;
 import by.urbel.docgenerator.util.FileUtils;
-import by.urbel.docgenerator.util.Randomizer;
 import by.urbel.docgenerator.util.Utils;
-import fr.opensagres.poi.xwpf.converter.core.ImageManager;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
-import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
-import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
 import lombok.extern.slf4j.Slf4j;
-import net.lingala.zip4j.ZipFile;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
 
 @Slf4j
 public class TemplateService {

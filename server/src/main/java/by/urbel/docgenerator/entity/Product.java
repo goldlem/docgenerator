@@ -19,7 +19,11 @@ public class Product implements Mappable {
 
     public Double getTotal() {
         if (quantity != null && price != null) {
-            return quantity * price;
+            double total = quantity * price;
+            if (tax!=null){
+                total+=tax;
+            }
+            return total;
         } else {
             return 0.0;
         }
@@ -44,6 +48,7 @@ public class Product implements Mappable {
         map.put(String.format("[Price %d]", id), formattedPrice);
         map.put(String.format("[Product discount %d]", id), formattedDiscount);
         map.put(String.format("[Product tax %d]", id), formattedTax);
+        map.put(String.format("[Product tax value %d]", id), String.format("$%.2f",tax));
         map.put(String.format("[Product total %d]", id), formattedTotal);
         return map;
     }
