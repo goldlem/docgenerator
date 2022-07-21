@@ -39,8 +39,7 @@ public class Controller {
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ApiRequestException(e.getMessage(), HttpStatus.valueOf(505));
+            throw new ApiRequestException(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -58,7 +57,7 @@ public class Controller {
                     .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(resource);
         } catch (Exception e) {
-            throw new ApiRequestException("Exception message: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ApiRequestException(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
